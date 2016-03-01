@@ -1,0 +1,23 @@
+<div class="container">
+	<div class="login-box">
+		<div class="inner">
+			<h2>Login to Close.io</h2>
+
+			<form ng-submit="vm.onSubmit()">
+				<div class="input-group-md bottom10">
+					<input ng-model="vm.credentials.username" type="email" class="form-control" placeholder="Email">
+					<span class="error-font" ng-hide="vm.errorUsername == ''">{{vm.errorUsername}}</span>
+					<span class="error-font" ng-hide="vm.formError == ''">{{vm.formError}}</span>
+				</div>
+				<div class="input-group-md bottom10">
+					<input ng-model="vm.credentials.password" type="password" class="form-control" placeholder="Password">
+					<span class="error-font" ng-hide="vm.errorPassword == ''">{{vm.errorPassword}}</span>
+				</div>
+				<button ladda="vm.loading" data-style="zoom-out" type="submit" class="btn btn-primary">Log in</button>
+			</form>
+
+		</div>
+		<a class="pull-left under" href="/forgot" ng-show="vm.forgtPassword">Forgot your password?</a>
+		<a class="pull-right under signup" href="/signup" data-bypass="true" ng-show="vm.createAccount">Create an account</a>
+	</div>
+</div>

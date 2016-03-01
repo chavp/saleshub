@@ -1,0 +1,409 @@
+body {
+    margin: 0;
+    font-family: 'Lato','Helvetica',sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #222;
+    background-color: #f3f4f6;
+}
+
+.login-box{
+    position: absolute;
+    left: 43%;
+    top: 43%;
+    width: 274px;
+    height: 280px;
+    margin: -140px 0 0 -137px;
+}
+
+.login-box .inner {
+    background: #fff;
+    box-sizing: border-box;
+    padding: 25px;
+    border-radius: 4px;
+    box-shadow: 0 0 3px #ccc;
+    background-color: #fbfbfb;
+    background-image: linear-gradient(to bottom,#fcfcfc,#f9f9f9);
+    background-repeat: repeat-x;
+}
+
+.top-10 {
+    margin-top: -10px;
+}
+
+.top5 {
+    margin-top: 5px;
+}
+
+.top10 {
+    margin-top: 10px;
+}
+
+.top20 {
+    margin-top: 20px;
+}
+
+.bottom10 {
+    margin-bottom: 10px;
+}
+
+.bottom5 {
+    margin-bottom: 5px;
+}
+
+.left5 {
+    margin-left: 5px;
+}
+
+.right5 {
+    margin-right: 5px;
+}
+
+.error-font {
+    color: darkred;
+}
+
+.content-area-wrap {
+    position: absolute;
+    top: 53px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: 1024px;
+}
+
+.content-area {
+    background: #f3f4f6;
+    position: absolute;
+    left: 166px;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    border-left: solid 1px #f7f7f9;
+}
+
+.app-top {
+    display: table-row;
+}
+
+.content-area-inner{
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.app-content-wrap{
+    display: table-row;
+    height: 100%;
+}
+
+.app-content{
+    position: relative;
+    height: 100%;
+}
+
+.app-content-inner{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.app-content-inner > div{
+    padding: 20px;
+}
+
+.member-info{
+    padding: 10px;
+}
+
+.toptoolbar {
+    height: 52px;
+    padding: 0 10px;
+    background: #545457;
+    border-bottom: solid 1px #444;
+    position: relative;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 0px;
+    width: 0;
+    height: 100%;
+}
+
+.left-nav {
+    width: 165px;
+    background: #d8dbe4;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-right: solid 1px #bcbdbe;
+}
+
+.left-nav ul {
+    list-style: none;
+    margin: 0 0 20px 15px;
+}
+
+.left-nav a {
+    display: block;
+    color: #3e3e3e;
+    font-size: 14px;
+    padding: 7px 0;
+}
+
+.left-nav-scroller{
+	overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    padding: 30px 0 30px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    left: 0;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+}
+
+
+.search-box .clear-btn{
+    position: absolute;
+    right: auto;
+    left: 367px;
+    top: 7px;
+    background: #ddd;
+    border-radius: 16px;
+    width: 16px;
+    height: 16px;
+    color: white;
+    line-height: 0;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.toptoolbar .top-right-btns {
+    float: right;
+}
+
+a, a:visited, a:hover, a:active {
+  text-decoration: none;
+}
+
+.toptoolbar .profile-button.dropdown.open button.dropdown-toggle {
+    background: rgba(255,255,255,0.1);
+}
+
+.toptoolbar .profile-button.dropdown button.dropdown-toggle {
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 1px rgba(0,0,0,0.1);
+    font-size: 12px;
+    color: #eaeaea;
+    float: left;
+    padding: 0 0 0 10px;
+    height: 40px;
+    line-height: 40px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.toptoolbar .profile-button.dropdown .current-org {
+    padding: 2px;
+    border: solid 1px #E5E5E5;
+    margin-bottom: 5px;
+    border-width: 0 0 1px 0;
+    cursor: default;
+    position: relative;
+    top: -5px;
+    word-wrap: break-word;
+}
+
+.toptoolbar .profile-button.dropdown .dropdown-menu {
+    min-width: 200px;
+    max-height: 500px;
+    max-width: 300px;
+    overflow: auto;
+    right: 0;
+    left: auto;
+}
+
+.toptoolbar .profile-button.dropdown .current-org > div {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    padding: 10px 17px;
+    margin: 0;
+}
+
+.profile-pic {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-top: -1px;
+    margin-right: -5px;
+    margin-bottom: -1px;
+    box-shadow: 0 0 1px rgba(0,0,0,0.4);
+}
+
+.dropup, .dropdown {
+    position: relative;
+}
+
+.col-email, .col-call{
+    width: 40px;
+}
+
+.row-lead {
+    cursor:pointer;
+}
+
+h1.company {
+    margin-bottom: 10px;
+    cursor: pointer;
+    word-break: break-word;
+}
+
+.add-missing{
+    font-style: italic;
+    color: #999;
+}
+
+.add-missing a {
+    font-style: italic;
+    color: #999;
+}
+
+.add-missing a:hover{
+    text-decoration: underline;
+}
+
+.lead-description{
+    cursor:pointer;
+}
+
+.contacts{
+
+}
+
+.contacts h2{
+    font-size: 15px;
+    line-height: 22px;
+    color: #404143;
+    margin-bottom: 5px;
+    position: relative;
+    border-bottom: dotted 1px #bec0c2;
+}
+
+.contacts a{
+    text-decoration: none;
+}
+
+.contacts a.add{
+    float: right;
+    font-weight: normal;
+    font-size: 12px;
+    color: #4c4d4f;
+}
+
+ul.contacts-list .contact {
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border: 1px solid #ddd;
+    color: #222;
+}
+
+.lead-contact{
+    cursor:pointer;
+}
+
+.none {
+    color: #777;
+    font-size: .85em;
+}
+
+.contact-chanel-tools{
+    margin-top: -8px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.contact-channel-item{
+    margin-top: -10px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.blue-font{
+    color: #3781b8 !important;
+}
+
+.btn-edit {
+    background: #999 !important;
+    border-radius: 5px;
+    height: 18px;
+}
+
+.first-column {
+    padding-right: 25px;
+    padding-left: 40px;
+}
+
+.second-column {
+    padding-right: 7%;
+    padding-left: 40px;
+}
+
+.timeline-heading{
+
+}
+
+time {
+    color: #aaa;
+    border-bottom: dotted 1px #999;
+    font-size: 1.0em;
+}
+
+.form-note{
+    width: 400px;
+}
+
+.file-list{
+    list-style-type: disc;
+    margin: 0 0 5px 15px;
+    font-size: .9em;
+}
+
+.loader {
+    background-image: url(../lib/ng-file-upload/ajax-loader.gif);
+    background-size: 16px 16px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 2px;
+    vertical-align: -3px;
+}
+
+.compose-draft{
+    cursor: pointer;
+}

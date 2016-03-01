@@ -1,0 +1,102 @@
+var margin = { top: 20, right: 55, bottom: 50, left: 40 },
+                      width = 1000 - margin.left - margin.right,
+                      height = 500 - margin.top - margin.bottom;
+
+            var x0 = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+
+            var x1 = d3.scale.ordinal();
+
+            var y = d3.scale.linear().range([height, 0]);
+
+            var departments = ["a", "b", "c", "d"];
+            var color = d3.scale.category20().domain(departments);
+
+            var xAxis = d3.svg.axis()
+                        .scale(x0)
+                        .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(d3.format(".2s"));
+
+            var svg = d3.select("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var data = [
+                {
+                    year: 2014,
+                    departments: [
+                      { name: "a", value: 10 },
+                      { name:"b", value: 5 },
+                      { name:"c", value: 8 },
+                      { name:"d", value: 0 }
+                    ]
+                },
+                {
+                    year: 2015,
+                    departments: [
+                      { name: "a", value: 7 },
+                      { name: "b", value: 3 },
+                      { name: "c", value: 0 },
+                      { name: "d", value: 7 }
+                    ]
+                }
+            ];
+
+            var years = [2014, 2015];
+            
+            x0.domain([2014, 2015]);
+            x1.domain(departments).rangeRoundBands([0, x0.rangeBand()]);
+            y.domain([0, 10]);
+
+            svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+              .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Cost");
+
+            var state = svg.selectAll(".state").data(data);
+            state.enter().append("g")
+                .attr("class", "g")
+                .attr("transform", function (d) { return "translate(" + x0(d.year) + ",0)"; });
+
+            var bars = state.selectAll("rect").data(function (d) { return d.departments; });
+
+            bars.enter().append("rect")
+                .attr("width", x1.rangeBand())
+                .attr("x", function (d) { return x1(d.name); })
+                .attr("y", function (d) { return y(d.value); })
+                .style("fill", function (d) { return color(d.name); })
+                .attr("height", function (d) { return height - y(d.value); });
+
+            var legend = svg.selectAll(".legend")
+                .data(departments.slice().reverse())
+              .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function (d) { return d; });
