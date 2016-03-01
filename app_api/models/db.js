@@ -4,7 +4,7 @@ var seeder = require('mongoose-seeder');
 
 var gracefulShutdown;
 var dbURI = 'mongodb://localhost/saleshub';
-if (process.env.NODE_ENV === 'PRODUCTION') {
+if (process.env.NODE_ENV === 'production') {
     dbURI = process.env.MONGOLAB_URI;
 }
 
