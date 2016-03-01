@@ -11,7 +11,7 @@ var passport = require('passport');
 var featureToggles = require('feature-toggles');
 
 var toggles = {
-  searchLead: true
+  searchLead: false
 };
 featureToggles.load(toggles);
 
