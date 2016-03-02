@@ -256,6 +256,8 @@
             }
 
             vm.toEmails = [];
+            vm.subject = "";
+            vm.content = "";
             vm.attachFiles = [];
             vm.uploading = false;
 
@@ -338,8 +340,24 @@
                 subject: vm.subject,
                 content: vm.content,
                 attachs: vm.attachFiles.map(function(d){ return d.name; })
-            }, function(err){
-
+            }, function(err, event){
+                //console.log(event);
+                vm.deleteEvent();
+                vm.events.unshift({
+                        uuid: guid(),
+                        badgeClass: 'info',
+                        badgeIconClass: 'glyphicon-envelope',
+                        _id: event._id,
+                        type: event.type,
+                        fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
+                        name: event.riaseFrom.profile.firstName,
+                        //title: event.title,
+                        //content: event.content,
+                        createdAt: event.createdAt,
+                        riaseFrom: event.riaseFrom,
+                        compose: event.compose,
+                        status: 'draft'
+                    });
             });
         }
 
