@@ -71,7 +71,31 @@ module.exports.saveEmail = function(req, res) {
 				          return;
 				        }
 
-				        helper.sendJsonResponse(res, OK, compose);
+						LeadEvent
+								.find({
+									compose: compose
+								})
+								.populate('riaseFrom')
+								.populate('riaseTo')
+								.populate('compose')
+								.sort({createdAt: 'desc'})
+								//.sort({createdAt: 'asc'})
+								.exec(function(err, docs){
+
+									MemberProfile.populate(docs, {
+								     	path: 'riaseFrom.profile'
+								     }, function(err, result){
+								     	if (err) {
+								          //console.log(err);
+									        helper.sendJsonResponse(res, BAD_REQUEST, err);
+									        return;
+									    }
+									    helper.sendJsonResponse(res, OK, docs[0]);
+								     });
+
+									//helper.sendJsonResponse(res, OK, docs);
+									//return leads;
+								});
 					});
 				});
 		});
