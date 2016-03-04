@@ -100,3 +100,84 @@ module.exports.saveEmail = function(req, res) {
 				});
 		});
 }
+
+// PUT updateEmail
+module.exports.updateEmail = function(req, res) {
+	console.log('PUT updateEmail', req.body);
+	if(!req.params.composeId || req.params.composeId == 'null'){
+		helper.sendJsonResponse(res, NOT_FOUND, {
+			"message": "Not found compose Id"
+		});
+		return;
+	}
+	Compose
+		.findById(req.params.composeId)
+		.exec(function(err, compose){
+			if (err) {
+	          //console.log(err);
+	          helper.sendJsonResponse(res, BAD_REQUEST, err);
+	          return;
+	        }
+	        if (!compose) {
+	          //console.log(err);
+	          helper.sendJsonResponse(res, NOT_FOUND, {
+				"message": "Not found compose"
+			  });
+	          return;
+	        }
+
+	        compose.to = req.body.to;
+	        compose.cc = req.body.cc;
+	        compose.bcc = req.body.bcc;
+	        compose.subject = req.body.subject;
+	        compose.content = req.body.content;
+	        compose.attachs = req.body.attachs;
+
+	        compose.save(function(err){
+	        	if (err) {
+			        helper.sendJsonResponse(res, BAD_REQUEST, err);
+			        return;
+			    }
+
+	     		helper.sendJsonResponse(res, OK, compose);
+	        });
+		});
+}
+
+// DELETE deleteEmail
+module.exports.deleteEmail = function(req, res){
+	console.log('DELETE deleteEmail', req.params);
+	if (!req.params.composeId) {
+	    helper.sendJsonResponse(res, BAD_REQUEST, {
+	      "message": "Not found, compose Id"
+	    });
+	    return;
+	}
+	Compose
+	  .findById(req.params.composeId)
+	  .exec	(function(err, compose){
+	    if (err) {
+	          //console.log(err);
+	        helper.sendJsonResponse(res, BAD_REQUEST, err);
+	        return;
+	     }
+	     if(!compose){
+	     	helper.sendJsonResponse(res, NOT_FOUND, {
+	     		"message": "Not found compose"
+	     	});
+	        return;
+	     }
+
+	     compose.remove(function(err){
+	     	if (err) {
+	          //console.log(err);
+	        	helper.sendJsonResponse(res, BAD_REQUEST, err);
+	        	return;
+	     	}
+
+	     	helper.sendJsonResponse(res, OK, {
+	     		"message": "Delete completed."
+	     	});
+	     });
+	  });
+}

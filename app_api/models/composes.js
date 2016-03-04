@@ -68,6 +68,15 @@ composeSchema.pre('save', function(next) {
 	}
 });
 
+composeSchema.pre('remove', function(next) {
+	var me = this;
+    // 'this' is the client being removed. Provide callbacks here if you want
+    // to be notified of the calls' result.
+    LeadEvent.remove({ compose: me }).exec();
+    next();
+});
+
+
 composeSchema.plugin(timestamps);
 
 mongoose.model('Compose', composeSchema);

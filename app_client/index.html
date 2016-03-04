@@ -150,6 +150,66 @@
           }
         }
 
+        function EventModel(event, badgeClass, badgeIconClass){
+            var self = this;
+            var editing = false;
+            var status = "";
+            var haveBcc = false,
+                haveCc = false;
+
+            if(event.compose){
+                if(event.compose.status == 'Draft'){
+                    status = "draft";
+                }
+                if(event.compose.cc.length > 0){
+                    haveCc = true;
+                }
+                if(event.compose.bcc.length > 0){
+                    haveBcc = true;
+                }
+            }
+            
+            //console.log(event);
+            return {
+                uuid: guid(),
+                _id: event._id,
+                badgeClass: badgeClass,
+                badgeIconClass: badgeIconClass,
+                type: event.type,
+                title: event.title,
+                content: event.content,
+                createdAt: event.createdAt,
+                riaseFrom: event.riaseFrom,
+                fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
+                name: event.riaseFrom.profile.firstName,
+                compose: event.compose,
+                status: status,
+                uploading: false,
+                newAttachs: [],
+                isEditiong: function(){
+                    return editing;
+                },
+                beginEdit: function(){
+                    editing = true;
+                },
+                endEdit: function(){
+                    editing = false;
+                },
+                haveBcc: function(){
+                    return haveBcc;
+                },
+                haveCc: function(){
+                    return haveCc;
+                },
+                addCc: function(){
+                    haveCc = true;
+                },
+                addBcc: function(){
+                    haveBcc = true;
+                }
+            }
+        }
+
         $(function(){
             jQuery.extend(jQuery.validator.messages, {
                 required: "This field is required.",

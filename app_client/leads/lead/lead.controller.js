@@ -143,50 +143,13 @@
             for (var i = 0; i < result.length; i++) {
                 var event = result[i];
                 if(event.type === 'Lead'){
-                    vm.events.push({
-                        uuid: guid(),
-                        badgeClass: 'default',
-                        badgeIconClass: 'fa fa-newspaper-o',
-                        type: event.type,
-                        title: event.title,
-                        content: event.content,
-                        createdAt: event.createdAt,
-                        riaseFrom: event.riaseFrom,
-                        fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
-                        name: event.riaseFrom.profile.firstName
-                    });
+                    vm.events.push( new EventModel(event, 'default', 'fa fa-newspaper-o') );
 
                 } else if(event.type === 'Note'){
-                    vm.events.push({
-                        uuid: guid(),
-                        badgeClass: 'warning',
-                        badgeIconClass: 'glyphicon-comment',
-                        _id: event._id,
-                        type: event.type,
-                        title: event.title,
-                        content: event.content,
-                        createdAt: event.createdAt,
-                        riaseFrom: event.riaseFrom,
-                        fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
-                        name: event.riaseFrom.profile.firstName
-                    });
+                    vm.events.push( new EventModel(event, 'warning', 'glyphicon-comment') );
                 } else if(event.type === 'Email' && event.compose.status === 'Draft'){
                     //console.log(event);
-                    vm.events.push({
-                        uuid: guid(),
-                        badgeClass: 'info',
-                        badgeIconClass: 'glyphicon-envelope',
-                        _id: event._id,
-                        type: event.type,
-                        fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
-                        name: event.riaseFrom.profile.firstName,
-                        //title: event.title,
-                        //content: event.content,
-                        createdAt: event.createdAt,
-                        riaseFrom: event.riaseFrom,
-                        compose: event.compose,
-                        status: 'draft'
-                    });
+                    vm.events.push( new EventModel(event, 'info', 'glyphicon-envelope') );
                 }
             };
         });
@@ -343,24 +306,96 @@
             }, function(err, event){
                 //console.log(event);
                 vm.deleteEvent();
-                vm.events.unshift({
-                        uuid: guid(),
-                        badgeClass: 'info',
-                        badgeIconClass: 'glyphicon-envelope',
-                        _id: event._id,
-                        type: event.type,
-                        fullname: event.riaseFrom.profile.firstName + " " + event.riaseFrom.profile.lastName,
-                        name: event.riaseFrom.profile.firstName,
-                        //title: event.title,
-                        //content: event.content,
-                        createdAt: event.createdAt,
-                        riaseFrom: event.riaseFrom,
-                        compose: event.compose,
-                        status: 'draft'
-                    });
+                vm.events.unshift(  new EventModel(event, 'info', 'glyphicon-envelope') );
             });
         }
 
+        vm.saveEventDraft = function(event){
+            //console.log(event);
+            if(event.compose.to.length == 0){
+                return false;
+            }
+            var attachs = [];
+            if(event.compose.attachs) {
+                event.compose.attachs.forEach(function(file){
+                    attachs.push(file);
+                });
+            }
+            if(event.compose.newAttachs) {
+                event.compose.newAttachs.map(function(d){
+                    attachs.push(d.name);
+                });
+            }
+            //console.log(attachs);
+            emails.updateDraft({
+                memberId: vm.currentUser._id,
+                leadId: vm.leadId,
+                composeId: event.compose._id,
+                from: event.compose.from,
+                to: event.compose.to.map(function(d){ return d.text; }),
+                cc: event.compose.cc.map(function(d){ return d.text; }),
+                bcc: event.compose.bcc.map(function(d){ return d.text; }),
+                subject: event.compose.subject,
+                content: event.compose.content,
+                attachs: attachs
+            }, function(err, ev){
+                //console.log(event);
+                //vm.deleteEvent();
+                event.endEdit();
+                //vm.events.unshift(  new EventModel(event, 'info', 'glyphicon-envelope') );
+            });
+        }
+
+        vm.deleteEventFile = function(fileId){
+
+        }
+
+        vm.deleteEventDraft = function(event){
+            //alert(fileId);
+            emails.deleteDraft(
+                event.compose._id, 
+                function(err, ev){
+                    removeByField(vm.events, 'uuid', event.uuid);
+                }
+            );
+        }
+
+        vm.uploadEventFiles = function(event){
+            //event.uploading = true;
+            /*event.compose.attachs.forEach(file){
+                file.uploading = false;
+            }*/
+            if (event.compose.newAttachs && event.compose.newAttachs.length ) {
+                var token = accounts.getToken();
+                //vm.uploading = true;
+                event.compose.newAttachs.forEach(function(file){
+                    file.uploading = true;
+                    Upload.upload({
+                        url: '/api/files/',
+                        method: 'POST',
+                        data: {file: file},
+                        headers : {
+                            'Content-Type': file.type,
+                            'Authorization': 'Bearer '+ token
+                        }
+                        //headers: {'Authorization': 'xxx'}
+                    }).then(function (resp) {
+                        var response = resp.data;
+                        file.uploading = false;
+                        //console.log(vm.attachFiles);
+                        console.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + response.message);
+                    }, function (resp) {
+                        console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        if(progressPercentage === 100){
+                            file.uploading = false;
+                        }
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    });
+                });
+            }
+        }
     }
 
 })();

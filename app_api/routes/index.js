@@ -57,6 +57,8 @@ router.post('/files', auth, multipartMiddleware, ctrFileUpload.upload);
 
 // Lead Email
 router.post('/emails', auth, ctrEmail.saveEmail);
+router.put('/emails/:composeId', auth, ctrEmail.updateEmail);
+router.delete('/emails/:composeId', auth, ctrEmail.deleteEmail);
 
 // Opportunities
 
