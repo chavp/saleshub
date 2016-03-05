@@ -341,6 +341,10 @@ ul.contacts-list .contact {
     cursor:pointer;
 }
 
+.cursor-pointer{
+    cursor:pointer;
+}
+
 .none {
     color: #777;
     font-size: .85em;

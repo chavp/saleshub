@@ -92,7 +92,15 @@
         vm.beginEmail = function(lead){
             $location
                 .path('/leads/' + lead._id)
-                .search({to: lead.email});;
+                .search({to: lead.email});
+            /*$rootScope.$emit("BEGIN_SEND_MAIL", {
+              to: [lead.email]
+            });*/
+        }
+
+        vm.showLead = function(lead){
+            $location
+                .path('/leads/' + lead._id);
             /*$rootScope.$emit("BEGIN_SEND_MAIL", {
               to: [lead.email]
             });*/
