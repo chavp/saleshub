@@ -60,6 +60,8 @@ router.post('/files', auth, multipartMiddleware, ctrFileUpload.upload);
 router.post('/emails', auth, ctrEmail.saveEmail);
 router.put('/emails/:composeId', auth, ctrEmail.updateEmail);
 router.delete('/emails/:composeId', auth, ctrEmail.deleteEmail);
+router.post('/emails/:composeId/send', auth, ctrEmail.sendEmail);
+router.post('/emails/send', auth, ctrEmail.sendNewEmail);
 
 // Opportunities
 

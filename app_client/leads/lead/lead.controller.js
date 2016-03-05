@@ -100,7 +100,7 @@
         $scope.$on("$destroy", UPDATE_LEAD_TOOLS);
         $scope.$on("$destroy", UPDATE_MEMBER);
         $scope.$on("$destroy", UPDATE_LEAD_TAGS);
-        
+
         /////////////////////////////////////////////
 
         var updateTools = function(){
@@ -139,13 +139,6 @@
             }
             //console.log(emails);
             return emails;
-        }
-
-        vm.sendMail = function(){
-            $log.debug(vm.toEmails);
-            $log.debug(vm.ccEmails);
-            $log.debug(vm.bccEmails);
-            $log.debug(vm.attachFiles);
         }
 
         // optional: not mandatory (uses angular-scroll-animate)
@@ -230,10 +223,10 @@
 
                 } else if(event.type === 'Note'){
                     vm.events.push( new EventModel(event, 'warning', 'glyphicon-comment') );
-                } else if(event.type === 'Email' && event.compose.status === 'Draft'){
+                } else if(event.type === 'Email'){
                     //console.log(event);
                     vm.events.push( new EventModel(event, 'info', 'glyphicon-envelope') );
-                }
+                } 
             };
         });
     	//console.log($routeParams);
@@ -427,6 +420,46 @@
                 event.endEdit();
                 //vm.events.unshift(  new EventModel(event, 'info', 'glyphicon-envelope') );
             });
+        }
+
+        vm.sendMail = function(event){
+            if(event) {
+                if(event.compose.to.length == 0){
+                    return false;
+                }
+                emails.sendMail(
+                    event.compose._id, 
+                    function(err, ev){
+                        event.compose.status = ev.status;
+                        removeByField(vm.events, 'uuid', event.uuid);
+                        vm.events.unshift(  new EventModel(event, 'info', 'glyphicon-envelope') );
+                    }
+                );
+            } else {
+                if(vm.toEmails.length == 0){
+                    return false;
+                }
+
+                emails.sendNewMail({
+                    memberId: vm.currentUser._id,
+                    leadId: vm.leadId,
+                    from: vm.currentUser.email,
+                    to: vm.toEmails.map(function(d){ return d.text; }),
+                    cc: vm.ccEmails.map(function(d){ return d.text; }),
+                    bcc: vm.bccEmails.map(function(d){ return d.text; }),
+                    subject: vm.subject,
+                    content: vm.content,
+                    attachs: vm.attachFiles.map(function(d){ return d.name; })
+                }, function(err, ev){
+                    vm.deleteEvent();
+                    vm.events.unshift(  new EventModel(ev, 'info', 'glyphicon-envelope') );
+                });
+            }
+            
+            /*$log.debug(vm.toEmails);
+            $log.debug(vm.ccEmails);
+            $log.debug(vm.bccEmails);
+            $log.debug(vm.attachFiles);*/
         }
 
         vm.deleteEventFile = function(fileId){
