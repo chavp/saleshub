@@ -6,7 +6,7 @@
     </label>
     <div class="input-group-btn" role="group" aria-label="...">
       <button type="button" class="btn btn-default" ng-disabled="!convm.canCall()" title="Call {{convm.contact.phone}}"><span class="glyphicon glyphicon-earphone"></span></button>
-      <button type="button" class="btn btn-default" ng-disabled="!convm.canEmail()" title="Email {{convm.contact.email}}"><span class="glyphicon glyphicon-envelope"></span></button>
+      <button type="button" class="btn btn-default" ng-disabled="!convm.canEmail()" title="Email {{convm.contact.email}}" ng-click="convm.beginEmail()"><span class="glyphicon glyphicon-envelope"></span></button>
     </div>
 </div>
 

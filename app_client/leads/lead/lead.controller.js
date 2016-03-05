@@ -97,10 +97,14 @@
             }
         });
 
+        var BEGIN_SEND_MAIL = $rootScope.$on('BEGIN_SEND_MAIL', function(event, params){
+            vm.addEmail(params.to);
+        });
+
         $scope.$on("$destroy", UPDATE_LEAD_TOOLS);
         $scope.$on("$destroy", UPDATE_MEMBER);
         $scope.$on("$destroy", UPDATE_LEAD_TAGS);
-
+        $scope.$on("$destroy", BEGIN_SEND_MAIL);
         /////////////////////////////////////////////
 
         var updateTools = function(){
@@ -250,7 +254,7 @@
             vm.noteFocus = true;
         }
 
-        vm.addEmail = function(){
+        vm.addEmail = function(to){
             if(vm.oneEvent != null){
                 vm.events.shift(vm.oneEvent);
                 delete vm.oneEvent;
@@ -263,6 +267,9 @@
                 title: '',
                 content: ''
             };
+            if(to) {
+                vm.toEmails = to;
+            }
             vm.events.unshift(vm.oneEvent);
         }
 
@@ -511,6 +518,10 @@
                     });
                 });
             }
+        }
+
+        if($routeParams.to){
+            vm.addEmail([$routeParams.to]);
         }
     }
 

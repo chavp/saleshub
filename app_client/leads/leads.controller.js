@@ -58,9 +58,9 @@
                     }
                     var results = data.map(function(d){
                         if(d.contacts.length > 0){
-                            //var conChannels = d.contacts[0].contactChannels;
-                            for (var i = 0; i < d.tags.length; i++) {
-                                var name = d.tags[i].tag;
+                            var conChannels = d.contacts[0].contactChannels;
+                            for (var i = 0; i < conChannels.length; i++) {
+                                var name = conChannels[i].name;
                                 if(validateEmail(name)) {
                                     d.email = name;
                                     break;
@@ -87,6 +87,15 @@
                     vm.leadResults = results;
                 }
             });
+        }
+
+        vm.beginEmail = function(lead){
+            $location
+                .path('/leads/' + lead._id)
+                .search({to: lead.email});;
+            /*$rootScope.$emit("BEGIN_SEND_MAIL", {
+              to: [lead.email]
+            });*/
         }
 
         vm.refreshLeads();

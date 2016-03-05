@@ -98,6 +98,12 @@
       vm.isEditing = false;
     }
 
+    vm.beginEmail = function(){
+      $rootScope.$emit("BEGIN_SEND_MAIL", {
+        to: [vm.contact.email]
+      });
+    }
+    
     vm.canEmail = function(){
       vm.contact.email = null;
       for (var i = 0; i <  vm.contact.contactChannels.length; i++) {
