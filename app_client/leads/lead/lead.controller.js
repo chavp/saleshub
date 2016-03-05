@@ -5,6 +5,7 @@
       .controller('leadCtrl', leadCtrl);
 
     leadCtrl.$inject = [
+        '$scope',
         '$rootScope', 
         '$routeParams', '$location', '$log', 'config', 
         'blockUI', 
@@ -14,19 +15,33 @@
         'accounts',
         'emails'];
     function leadCtrl(
-            $rootScope, $routeParams, $location, $log, config, 
+            $scope,
+            $rootScope, 
+            $routeParams, $location, $log, config, 
             blockUI, Upload,
             leads, leadEvents, accounts, emails) {
     	var vm = this;
 
         //console.log($scope.ledvm);
+        //$log.debug($scope.ledvm);
 
-        vm.isCanEmail = true;
+        vm.isCanEmail = false;
         vm.isCanCall = false;
         vm.leadId = $routeParams.leadId;
 
+        /*if(vm.tags && vm.tags.length > 0){
+            vm.tags.forEach(function(tag){
+                if(tag.type === 'Email'){
+                    vm.isCanEmail = true;
+                }
+                if(tag.type === 'Phone'){
+                    vm.isCanCall = true;
+                }
+            });
+        }*/
+
         // event
-        $rootScope.$on('UPDATE_LEAD_TOOLS', function(event, params){
+        var UPDATE_LEAD_TOOLS = $rootScope.$on('UPDATE_LEAD_TOOLS', function(event, params){
             //console.log(params);
             if(params.isCanEmail){
                 vm.isCanEmail = params.isCanEmail;
@@ -37,10 +52,70 @@
         });
 
         vm.currentUser= $rootScope.currentUser;
-        $rootScope.$on('UPDATE_MEMBER', function(event, params){
+        var UPDATE_MEMBER = $rootScope.$on('UPDATE_MEMBER', function(event, params){
             vm.currentUser = params.currentUser;
         });
+
+        var UPDATE_LEAD_TAGS = $rootScope.$on('UPDATE_LEAD_TAGS', function(event, params){
+            //$log.debug("old tags: " + vm.tags);
+            //$log.debug("new tags: " + params.newtags);
+            if(params.leadId == vm.leadId) { // OK target
+                var tags = [];
+                if(params.newtags && params.newtags.length > 0){
+                    params.newtags.forEach(function(tag){
+                        if(validateEmail(tag)){
+                            tags.push({
+                                tag: tag,
+                                type: 'Email'
+                            });
+                        } else if(validatePhone(tag)){
+                            tags.push({
+                                tag: tag,
+                                type: 'Phone'
+                            });
+                        }
+                    });
+
+                    if(tags && tags.length > 0) {
+                        // save tags
+                        leads.saveTags({
+                            leadId: vm.leadId,
+                            tags: tags
+                        }, function(err, result){
+                            vm.tags = result.tags;
+                            updateTools();
+
+                            //$log.debug("update tags: " + result.tags);
+                        });
+                    }
+                }
+                
+                if(params.tags && params.tags.length > 0){
+                    vm.tags = params.tags;
+                    updateTools();
+                }
+            }
+        });
+
+        $scope.$on("$destroy", UPDATE_LEAD_TOOLS);
+        $scope.$on("$destroy", UPDATE_MEMBER);
+        $scope.$on("$destroy", UPDATE_LEAD_TAGS);
+        
         /////////////////////////////////////////////
+
+        var updateTools = function(){
+            vm.isCanEmail = false;
+            vm.isCanCall = false;
+
+            vm.tags.forEach(function(tag){
+                if(tag.type === 'Email'){
+                    vm.isCanEmail = true;
+                }
+                if(tag.type === 'Phone'){
+                    vm.isCanCall = true;
+                }
+            });
+        }
 
         vm.isEmpaty = function(){
             return vm.contacts.length === 0;
@@ -55,7 +130,15 @@
         vm.attachFiles = [];
         vm.subject = "";
         vm.loadEmail = function($query){
-            return ['my.parinya@gmail.com', 'my.parinya@outlook.com'];
+            var emails = [];
+            if(vm.tags && vm.tags.length > 0){
+                for (var i = 0; i < vm.tags.length; i++) {
+                    if(vm.tags[i].type == 'Email') 
+                        emails.push(vm.tags[i].tag); 
+                }
+            }
+            //console.log(emails);
+            return emails;
         }
 
         vm.sendMail = function(){

@@ -4,17 +4,30 @@
       .controller('leadsCtrl', leadsCtrl);
 
     leadsCtrl.$inject = [
-        '$window', '$rootScope', '$location', '$log', 'config', 'blockUI', 
+        '$scope',
+        '$window', 
+        '$rootScope', 
+        '$location', 
+        '$log', 'config', 'blockUI', 
         'accounts', 'leads', 'emails'];
-    function leadsCtrl($window, $rootScope, $location, $log, config, blockUI, accounts, leads, emails) {
+    function leadsCtrl(
+        $scope,
+        $window, 
+        $rootScope, 
+        $location, 
+        $log, config, blockUI, accounts, leads, emails) {
     	var vm = this;
 
-        $rootScope.$on('REFRESH_LEAD', function(){
+        // event on
+        var REFRESH_LEAD = $rootScope.$on('REFRESH_LEAD', function(){
             //console.log(params);
             vm.refreshLeads();
 
             
         });
+        
+        $scope.$on("$destroy", REFRESH_LEAD);
+        // end event
 
         vm.currentPath = $location.path();
         
@@ -45,16 +58,16 @@
                     }
                     var results = data.map(function(d){
                         if(d.contacts.length > 0){
-                            var conChannels = d.contacts[0].contactChannels;
-                            for (var i = 0; i < conChannels.length; i++) {
-                                var name = conChannels[i].name;
+                            //var conChannels = d.contacts[0].contactChannels;
+                            for (var i = 0; i < d.tags.length; i++) {
+                                var name = d.tags[i].tag;
                                 if(validateEmail(name)) {
                                     d.email = name;
                                     break;
                                 }
                             };
-                            for (var i = 0; i < conChannels.length; i++) {
-                                var name = conChannels[i].name;
+                            for (var i = 0; i < d.tags.length; i++) {
+                                var name = d.tags[i].tag;
                                 if(validatePhone(name)) {
                                     d.phone = vm.phonePrefix + " " + name;
                                     break;

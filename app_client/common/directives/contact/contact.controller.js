@@ -123,11 +123,23 @@
       return vm.contact.phone != null || vm.contact.phone != undefined;
     }
 
+    var updateTags = function(){
+      var tags = [];
+      for (var i = 0; i <  vm.contact.contactChannels.length; i++) {
+        tags.push(vm.contact.contactChannels[i].name);
+      }
+      $rootScope.$emit("UPDATE_LEAD_TAGS", {
+        leadId: vm.contact.lead,
+        newtags: tags
+      });
+    }
+
     vm.save = function(){
       vm.saving = true;
-      $log.debug(vm.contact);
+      //$log.debug(vm.contact);
+      //console.log("Save");
        if(!vm.contact._id) { // save
-        //console.log("Save");
+        
          //console.log(vm.contact);
 
          leads.saveLeadContact(vm.contact, function(err, result){
@@ -140,7 +152,8 @@
             initGuid(vm.contact.contactChannels);
 
             vm.isEditing = false;
-            
+
+            updateTags();
           });
         } else { // update
           //console.log("Update");
@@ -154,6 +167,8 @@
             clearContactChnannel();
             // update lead
             vm.isEditing = false;
+
+            updateTags();
          });
       }// end if
     }
@@ -192,7 +207,7 @@
     }
 
     //console.log(vm.contact._id);
-    vm.canDelete = (vm.contact._id != null);
+    vm.canDelete = function(){ return (vm.contact._id != null); };
 
     vm.newChannel = function(){
       // default channel

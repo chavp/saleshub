@@ -41,6 +41,7 @@ router.post('/leads', auth, ctrLeads.leadSave);
 router.get('/leads/:leadId', auth, ctrLeads.leadById);
 router.put('/leads/:leadId', auth, ctrLeads.leadUpdate);
 router.delete('/leads/:leadId', auth, ctrLeads.leadDelete);
+router.post('/leads/:leadId/tags', auth, ctrLeads.leadSaveTags);
 
 // Lead / Contacts
 router.post('/leads/:leadId/contacts', auth, ctrContacts.leadSaveContact);

@@ -181,7 +181,7 @@
                                       </div>
                                       <div class="col-xs-6 col-md-6 col-lg-6 text-right">
                                         <button type="submit" class="btn btn-default" ng-click="vm.saveDraft()">Save draft</button>
-                                        <button type="submit" class="btn btn-primary" ng-click="vm.sendMail()">Send</button>
+                                        <button type="submit" class="btn btn-primary" ng-click="vm.sendMail()" disabled>Send</button>
                                       </div>
                                     </div>
                               </form>
@@ -192,9 +192,10 @@
                         <div ng-if="event._id != null">
                           <timeline-heading>
                             <small>{{event.compose.subject || "(No Subject)" }}</small>
-                            <span class="salesrep pull-right left5"><img class="user-img" width="32" height="32" alt="" src="https://secure.gravatar.com/avatar/1f90c8642c2edc6c55f00a67b824779f?d=mm&amp;r=x&amp;s=32" title="{{event.fullname}}">
-                              </span>
-                              <span class="user-name pull-right">{{event.name}}</span>
+                            <span class="salesrep pull-right left5">
+                              <img class="user-img" width="32" height="32" alt="" src="https://secure.gravatar.com/avatar/1f90c8642c2edc6c55f00a67b824779f?d=mm&amp;r=x&amp;s=32" title="{{event.fullname}}">
+                            </span>
+                            <span class="user-name pull-right">{{event.name}}</span>
                           </timeline-heading>
 
                           <div class="panel panel-default top20">
