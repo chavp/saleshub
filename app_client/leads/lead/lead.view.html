@@ -201,7 +201,7 @@
                           <div class="panel panel-default top20">
                             <div class="panel-heading">
 
-                              <div name="from" class="compose-draft" ng-click="event.beginEdit()">
+                              <div name="from" class="compose-draft" ng-click="event.toggleEdit()">
                                 <i class="glyphicon glyphicon-triangle-right" ng-if="!event.isEditiong()"></i> 
                                 <i class="glyphicon glyphicon-triangle-bottom" ng-if="event.isEditiong()"></i> 
                                 {{event.fullname}} <span ng-if="event.isEditiong()">"&lt{{event.compose.from}}&gt"</span>
@@ -291,7 +291,6 @@
                                         <div class="col-xs-6 col-md-6 col-lg-6 text-right">
                                           <button type="submit" class="btn btn-default" ng-click="vm.saveEventDraft(event)" ng-show="!event.isReadonly()">Save draft</button>
                                           <button type="submit" class="btn btn-primary" ng-click="vm.sendMail(event)" ng-show="!event.isReadonly()">Send</button>
-                                          <button type="button" class="btn btn-default" ng-click="event.endEdit()" ng-show="event.isReadonly()">Close</button>
                                         </div>
                                       </div>
                                   </div>
