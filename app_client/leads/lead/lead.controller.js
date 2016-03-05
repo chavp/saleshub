@@ -431,9 +431,10 @@
 
         vm.sendMail = function(event){
             if(event) {
-                if(event.compose.to.length == 0){
-                    return false;
-                }
+                if(event.compose.to.length == 0) return false;
+                if(!event.compose.subject) return false;
+                if(!event.compose.content) return false;
+                
                 emails.sendMail(
                     event.compose._id, 
                     function(err, ev){
@@ -443,9 +444,9 @@
                     }
                 );
             } else {
-                if(vm.toEmails.length == 0){
-                    return false;
-                }
+                if(vm.toEmails.length == 0) return false;
+                if(!vm.subject) return false;
+                if(!vm.content) return false;
 
                 emails.sendNewMail({
                     memberId: vm.currentUser._id,
