@@ -165,10 +165,11 @@
                                       <textarea class="form-control" rows="3" ng-model="vm.content"></textarea>
                                    </div>
                                    <div class="form-group row">
-                                      <div class="file-list">
-                                          <div ng-repeat="attachFile in vm.attachFiles track by $index">
+                                      <div class="file-list list-group">
+                                          <div ng-repeat="attachFile in vm.attachFiles track by $index" class="list-group-item">
                                             <div ng-show="attachFile.uploading"><span class="loader"></span> Uploading…</div>
-                                            <a href="#" ng-hide="attachFile.uploading">{{attachFile.name}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteFile(attachFile.name)"></span></a>
+                                            <a href="#" ng-hide="attachFile.uploading">{{attachFile.name}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteFile(attachFile)"></span></a>
+                                            <span class="badge" ng-hide="attachFile.uploading">{{attachFile.length | formatByteToKB}}</span>
                                           </div>
                                       </div>
                                    </div>
@@ -269,17 +270,27 @@
                                       <div class="form-group top-10">
                                         <textarea class="form-control" rows="3" ng-model="event.compose.content" ng-readonly="event.isReadonly()"></textarea>
                                       </div>
-                                      <div class="form-group row">
-                                      <div class="file-list">
-                                          <div ng-repeat="attachFile in event.compose.attachs track by $index">
-                                            <div ng-show="attachFile.uploading"><span class="loader"></span> Uploading…</div>
-                                            <a href="#" ng-hide="attachFile.uploading">{{attachFile}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteEventFile(attachFile)"></span></a>
-                                          </div>
-                                          <div ng-repeat="attachFile in event.compose.newAttachs track by $index">
-                                            <div ng-show="attachFile.uploading"><span class="loader"></span> Uploading…</div>
-                                            <a href="#" ng-hide="attachFile.uploading">{{attachFile.name}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteEventFile(attachFile)"></span></a>
-                                          </div>
+                                      <div class="form-group row" ng-show="!event.isReadonly()">
+                                        <div class="file-list list-group">
+                                            <div ng-repeat="attachFile in event.compose.attachs track by $index" class="list-group-item">
+                                              <div ng-show="attachFile.uploading"><span class="loader"></span> Uploading…</div>
+                                              <a href="#" ng-hide="attachFile.uploading">{{attachFile.fileName}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteEventFile(event, attachFile)"></span></a>
+                                              <span class="badge">{{attachFile.fileSize | formatByteToKB}}</span>
+                                            </div>
+                                            <div ng-repeat="attachFile in event.compose.newAttachs track by $index" class="list-group-item">
+                                              <div ng-show="attachFile.uploading"><span class="loader"></span> Uploading…</div>
+                                              <a href="#" ng-hide="attachFile.uploading">{{attachFile.name}} <span class="glyphicon glyphicon-remove" ng-click="vm.deleteEventFile(event, attachFile)"></span></a>
+                                              <span class="badge">{{attachFile.length | formatByteToKB}}</span>
+                                            </div>
+                                        </div>
                                       </div>
+                                      <div class="form-group row" ng-show="event.isReadonly()">
+                                        <div class="file-list list-group">
+                                            <div ng-repeat="attachFile in event.compose.attachs track by $index" class="list-group-item">
+                                              <a href="#" ng-hide="attachFile.uploading">{{attachFile.fileName}} </a> 
+                                              <span class="badge">{{attachFile.fileSize | formatByteToKB}}</span>
+                                            </div>
+                                        </div>
                                       </div>
                                       <div class="form-group row">
                                         <div class="col-xs-6 col-md-6 col-lg-6 text-left">

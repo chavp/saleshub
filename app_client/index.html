@@ -73,6 +73,7 @@
     <script src="/common/services/leads.service.js"></script>
     <script src="/common/services/lead-events.service.js"></script>
     <script src="/common/services/emails.service.js"></script>
+    <script src="/common/services/files.service.js"></script>
     <!-- directives -->
     <script src="/common/directives/toptoolbar/toptoolbar.controller.js"></script>
     <script src="/common/directives/toptoolbar/toptoolbar.directive.js"></script>
@@ -86,6 +87,7 @@
     <script src="/common/filters/formatContacts.filter.js"></script>
     <script src="/common/filters/formatCreatedAt.filter.js"></script>
     <script src="/common/filters/formatEmails.filter.js"></script>
+    <script src="/common/filters/formatByteToKB.filter.js"></script>
 
     <script src="/js/general/jquery-1.11.1.min.js"></script>
     <script src="/jquery-validation/jquery.validate.min.js"></script>
@@ -143,10 +145,12 @@
         }
 
         function removeByField(targetArray, field, value){
-            for (var i = 0; i < targetArray.length; i++) {
-            if(value === targetArray[i][field]){
-                targetArray.splice(i, 1);
-                break;
+            if(targetArray && targetArray.length > 0){
+                for (var i = 0; i < targetArray.length; i++) {
+                if(value === targetArray[i][field]){
+                    targetArray.splice(i, 1);
+                    break;
+                }
             }
           }
         }

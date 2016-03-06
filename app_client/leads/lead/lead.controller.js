@@ -13,13 +13,14 @@
         'leads', 
         'leadEvents',
         'accounts',
-        'emails'];
+        'emails',
+        'files'];
     function leadCtrl(
             $scope,
             $rootScope, 
             $routeParams, $location, $log, config, 
             blockUI, Upload,
-            leads, leadEvents, accounts, emails) {
+            leads, leadEvents, accounts, emails, files) {
     	var vm = this;
 
         //console.log($scope.ledvm);
@@ -330,10 +331,13 @@
             vm.bccEmails = [];
         }
 
-        vm.deleteFile = function(fileId){
-            //alert(fileId);
-            removeByField(vm.attachFiles, 'name', fileId);
-            
+        vm.deleteFile = function(file){
+            //console.log(file);
+            files.delete(
+                { pathId: file.pathId, attachFileId: file.attachFileId }, 
+                function(err, res){
+                    removeByField(vm.attachFiles, 'pathId', file.pathId);
+                });
         }
 
         // for multiple files:
@@ -347,7 +351,9 @@
                     Upload.upload({
                         url: '/api/files/',
                         method: 'POST',
-                        data: {file: file},
+                        data: {
+                            file: file
+                        },
                         headers : {
                             'Content-Type': file.type,
                             'Authorization': 'Bearer '+ token
@@ -356,7 +362,11 @@
                     }).then(function (resp) {
                         var response = resp.data;
                         file.uploading = false;
-                        console.log(vm.attachFiles);
+                        file.attachFileId = response.attachFileId;
+                        file.pathId = response.pathId;
+                        file.length = response.length;
+
+                        //console.log(vm.attachFiles);
                         console.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + response.message);
                     }, function (resp) {
                         console.log('Error status: ' + resp.status);
@@ -385,7 +395,13 @@
                 bcc: vm.bccEmails.map(function(d){ return d.text; }),
                 subject: vm.subject,
                 content: vm.content,
-                attachs: vm.attachFiles.map(function(d){ return d.name; })
+                attachs: vm.attachFiles.map(function(d){ 
+                    return {
+                        fileName: d.name,
+                        pathId: d.pathId,
+                        fileSize: d.length
+                    }; 
+                })
             }, function(err, event){
                 //console.log(event);
                 vm.deleteEvent();
@@ -400,13 +416,21 @@
             }
             var attachs = [];
             if(event.compose.attachs) {
-                event.compose.attachs.forEach(function(file){
-                    attachs.push(file);
+                event.compose.attachs.forEach(function(d){
+                    attachs.push({
+                        fileName: d.name,
+                        pathId: d.pathId,
+                        fileSize: d.length
+                    });
                 });
             }
             if(event.compose.newAttachs) {
                 event.compose.newAttachs.map(function(d){
-                    attachs.push(d.name);
+                    attachs.push({
+                        fileName: d.name,
+                        pathId: d.pathId,
+                        fileSize: d.length
+                    });
                 });
             }
             //console.log(attachs);
@@ -457,7 +481,13 @@
                     bcc: vm.bccEmails.map(function(d){ return d.text; }),
                     subject: vm.subject,
                     content: vm.content,
-                    attachs: vm.attachFiles.map(function(d){ return d.name; })
+                    attachs: vm.attachFiles.map(function(d){ 
+                        return {
+                            fileName: d.name,
+                            pathId: d.pathId,
+                            fileSize: d.length
+                        }
+                    })
                 }, function(err, ev){
                     vm.deleteEvent();
                     vm.events.unshift(  new EventModel(ev, 'info', 'glyphicon-envelope') );
@@ -470,8 +500,17 @@
             $log.debug(vm.attachFiles);*/
         }
 
-        vm.deleteEventFile = function(fileId){
-
+        vm.deleteEventFile = function(event, file){
+            console.log(file);
+            files.delete(
+                { 
+                    pathId: file.pathId, 
+                    attachFileId: file._id 
+                }, 
+                function(err, res){
+                    removeByField(event.compose.attachs, 'pathId', file.pathId);
+                    removeByField(event.compose.newAttachs, 'pathId', file.pathId);
+                });
         }
 
         vm.deleteEventDraft = function(event){
@@ -497,7 +536,10 @@
                     Upload.upload({
                         url: '/api/files/',
                         method: 'POST',
-                        data: {file: file},
+                        data: {
+                            file: file,
+                            composeId: event.compose._id
+                        },
                         headers : {
                             'Content-Type': file.type,
                             'Authorization': 'Bearer '+ token
@@ -506,6 +548,10 @@
                     }).then(function (resp) {
                         var response = resp.data;
                         file.uploading = false;
+                        file._id = response.attachFileId;
+                        file.pathId = response.pathId;
+                        file.length = response.length;
+
                         //console.log(vm.attachFiles);
                         console.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + response.message);
                     }, function (resp) {

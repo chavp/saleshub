@@ -39,7 +39,8 @@ var composeSchema = new Schema({
 	},
 
 	attachs:[{
-		type: String
+		type:Schema.ObjectId, 
+		ref:"AttachFile"
 	}],
 
 	status: {
@@ -73,6 +74,8 @@ composeSchema.pre('remove', function(next) {
     // 'this' is the client being removed. Provide callbacks here if you want
     // to be notified of the calls' result.
     LeadEvent.remove({ compose: me }).exec();
+    AttachFile.remove({ compose: me }).exec();
+
     next();
 });
 

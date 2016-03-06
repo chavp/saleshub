@@ -55,6 +55,7 @@ router.post('/leads/:leadId/events/', auth, ctrLeadEvents.leadEventsDone);
 
 // File upload
 router.post('/files', auth, multipartMiddleware, ctrFileUpload.upload);
+router.post('/files/:pathId', auth, ctrFileUpload.delete);
 
 // Lead Email
 router.post('/emails', auth, ctrEmail.saveEmail);
