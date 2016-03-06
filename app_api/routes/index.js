@@ -67,6 +67,7 @@ router.post('/emails/send', auth, ctrEmail.sendNewEmail);
 
 // Mailgun forward
 router.post('/messages/callback', ctrMailgunForward.callback);
+router.post('/messages', ctrMailgunForward.messages);
 
 // Opportunities
 

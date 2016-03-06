@@ -16,3 +16,18 @@ module.exports.callback = function(req, res){
 		);
 	});
 }
+
+// POST callback
+module.exports.messages = function(req, res){
+	console.log('POST callback', req.body);
+	
+	var mailgunForward = new MailgunForward({
+		body: "have message"
+	});
+
+	mailgunForward.save(function(err){
+		helper.sendJsonResponse(res, OK, 
+			{ "message": "Save forward mail completed." }
+		);
+	});
+}
