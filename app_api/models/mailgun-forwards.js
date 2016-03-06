@@ -10,6 +10,10 @@ var mailgunForwardSchema = new Schema({
 
 	params:{
 		type: String
+	},
+
+	req:{
+		type: String
 	}
 });
 
