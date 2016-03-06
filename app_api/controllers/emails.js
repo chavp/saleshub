@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var async    = require('async');
 var helper = require('./helper');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 
 function loadLeadEvent(compose, cb){
 	LeadEvent
@@ -330,7 +331,7 @@ function sendMail(compose, cb){
 				},
 				function done(){
 					//console.log(attachments);
-					var filepath = uploadsFolder + 'DS2map1_zpsa29dfc60.jpg';
+					//var filepath = uploadsFolder + 'DS2map1_zpsa29dfc60.jpg';
 					//var file = fs.readFileSync(filepath);
 					//var file = attachments[0].content;
 					nodemailerMailgun.sendMail({
