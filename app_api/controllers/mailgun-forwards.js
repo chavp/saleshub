@@ -22,8 +22,8 @@ module.exports.messages = function(req, res){
 	console.log('POST callback', req.body);
 	
 	var mailgunForward = new MailgunForward({
-		body: "have message",
-		req: JSON.stringify(req)
+		body: JSON.stringify(req.body),
+		params: JSON.stringify(req.params)
 	});
 
 	mailgunForward.save(function(err){
