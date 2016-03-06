@@ -364,7 +364,9 @@ function sendMail(compose, cb){
 					    compose.status = 'Send';
 					    compose.save(function(err, cm){
 					    	// delete all tem file
+					    	cm.attachs = attachs;
 					    	if(cb) cb(err, cm);
+
 					    	attachments.forEach(function(filename) {
 							  fs.unlink(filename.path);
 							});
