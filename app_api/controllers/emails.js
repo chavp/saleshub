@@ -311,19 +311,21 @@ function sendMail(compose, cb){
 							}
             			})
 					});*/
-					var filepath = uploadsFolder + attach.pathId; 
-					var fs_write_stream = fs.createWriteStream(filepath);
-					var readstream = gfs.createReadStream({
-					  _id: attach.pathId
-					});
-					readstream.pipe(fs_write_stream);
-					fs_write_stream.on('close', function () {
-					     console.log('file has been written fully!');
-					     attachments.push({
-					     	filename: attach.fileName,
-					     	path: filepath
-					     });
-					     done();
+					mkdirp(uploadsFolder, function(err) {
+						var filepath = uploadsFolder + attach.pathId; 
+						var fs_write_stream = fs.createWriteStream(filepath);
+						var readstream = gfs.createReadStream({
+						  _id: attach.pathId
+						});
+						readstream.pipe(fs_write_stream);
+						fs_write_stream.on('close', function () {
+						     console.log('file has been written fully!');
+						     attachments.push({
+						     	filename: attach.fileName,
+						     	path: filepath
+						     });
+						     done();
+						});
 					});
 				},
 				function done(){

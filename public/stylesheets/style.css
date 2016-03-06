@@ -398,7 +398,7 @@ time {
 
 .file-list{
     list-style-type: disc;
-    margin: 0 0 5px 15px;
+    margin: 0 15px 5px 15px;
     font-size: .9em;
 }
 
