@@ -4,6 +4,9 @@ var helper = require('./helper');
 var open = require('amqplib')
 	.connect(process.env.RABBITMQ_BIGWIG_TX_URL);
 
+var amqp = require('amqplib');
+var when = require('when');
+
 var q = 'webhook-compose',
     q_error = 'webhook-compose-error';
 
@@ -11,24 +14,46 @@ var q = 'webhook-compose',
 open.then(function(conn) {
   var ok = conn.createChannel();
   ok = ok.then(function(ch) {
-  	ch.assertQueue(q_error);
     ch.assertQueue(q);
     ch.consume(q, function(msg) {
       if (msg !== null) {
         //console.log(msg.content.toString());
         saveEventEmail(msg, function(err){
+
         	ch.ack(msg);
+
         	if(err) {
-        		ch.sendToQueue(q_error, new Buffer(msg.content));
+        		sendError(msg.content);
         	}
         });
-
-
       }
     });
   });
   return ok;
 }).then(null, console.warn);
+
+// Publish
+function sendError(msg){
+	amqp
+	.connect(process.env.RABBITMQ_BIGWIG_TX_URL)
+	.then(function(conn) {
+	  return when(conn.createChannel().then(function(ch) {
+
+	    var ok = ch.assertQueue(q_error, {durable: true});
+
+	    return ok.then(function(_qok) {
+	      // NB: `sentToQueue` and `publish` both return a boolean
+	      // indicating whether it's OK to send again straight away, or
+	      // (when `false`) that you should wait for the event `'drain'`
+	      // to fire before writing again. We're just doing the one write,
+	      // so we'll ignore it.
+	      ch.sendToQueue(q_error, new Buffer(msg));
+	      //console.log(" [x] Sent '%s'", msg);
+	      return ch.close();
+	    });
+	  })).ensure(function() { conn.close(); });
+	}).then(null, console.warn);
+}
 
 var saveEventEmail = function(msg, cb){
 	//console.log("processing... " + msg.content);
