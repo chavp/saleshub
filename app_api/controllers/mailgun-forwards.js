@@ -17,10 +17,10 @@ open.then(function(conn) {
       if (msg !== null) {
         //console.log(msg.content.toString());
         saveEventEmail(msg, function(err){
+        	ch.ack(msg);
         	if(err) {
         		ch.sendToQueue(q_error, new Buffer(msg.content));
         	}
-        	ch.ack(msg);
         });
 
 
@@ -39,8 +39,8 @@ var saveEventEmail = function(msg, cb){
 			from: cont.From,
 			to: cont.To
 		});
-		console.log("from: " + comppose.from + ", to: " + comppose.to + " completed!");
 		cb();
+		console.log("from: " + comppose.from + ", to: " + comppose.to + " completed!");
 	  } catch (err) {
 	  	console.error(err);
 	  	// Publisher
