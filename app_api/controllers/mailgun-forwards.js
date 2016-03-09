@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var helper = require('./helper');
 
+/*
 var open = require('amqplib')
 	.connect(process.env.RABBITMQ_BIGWIG_TX_URL);
 
@@ -19,6 +20,11 @@ open.then(function(conn) {
       if (msg !== null) {
         //console.log(msg.content.toString());
         saveEventEmail(msg, function(err){
+        	// process message
+
+        	// new Lead
+        	// old Lead send mail
+        	// old Lead reply mail
 
         	ch.ack(msg);
 
@@ -31,6 +37,7 @@ open.then(function(conn) {
   });
   return ok;
 }).then(null, console.warn);
+*/
 
 // Publish
 function sendError(msg){
