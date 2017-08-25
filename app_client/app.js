@@ -20,7 +20,7 @@
 	  		'angular-timeline',
 	  		'angular-scroll-animate',
 	  		'yh.featureToggle'])
-	  .constant("config", {
+	   .constant("config", {
         	"TOKEN_NAME": "sales_hub_token",
         	"EMPATY_DISPLAY": "Untitled",
         	"DEFAULT_PATH": "/leads"

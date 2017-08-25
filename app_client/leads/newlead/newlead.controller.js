@@ -34,7 +34,6 @@
     	 	//alert("OK");
             $uibModalInstance.close({ success: true, message: 'Save!' });
     	}
-
         vm.doCancel = function () {
             $uibModalInstance.dismiss('cancel');
             
